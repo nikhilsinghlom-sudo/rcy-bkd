@@ -12,7 +12,8 @@ app.use(express.json());
 
 const allowedOrigins = [
   'http://localhost:3000',      
-  'https://www.recyclamine.com/'
+  'https://www.recyclamine.com/',
+  'https://recyclamine.vercel.app/'
 ];
 
 
