@@ -12,8 +12,8 @@ app.use(express.json());
 
 const allowedOrigins = [
   'http://localhost:3000',      
-  'https://www.recyclamine.com/',
-  'https://recyclamine.vercel.app/'
+  'https://www.recyclamine.com',
+  'https://recyclamine.vercel.app'
 ];
 
 
@@ -114,4 +114,5 @@ app.post("/api/lead", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+
 });
