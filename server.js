@@ -1,20 +1,31 @@
 require("dotenv").config();
+
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 
 const app = express();
 
+
 app.use(cors());
 app.use(express.json());
 
 
 
+const PORT = process.env.PORT || 6000;
+
+
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true for port 465
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
@@ -31,6 +42,16 @@ app.post("/api/lead", async (req, res) => {
     designation,
     phone
   } = req.body;
+
+
+
+  if (!fname || !lname || !email || !orgName || !country) {
+    return res.status(400).json({
+      success: false,
+      message: "Required fields missing"
+    });
+  }
+
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -72,6 +93,6 @@ app.post("/api/lead", async (req, res) => {
 });
 
 
-app.listen(process.env.PORT || 6000, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
