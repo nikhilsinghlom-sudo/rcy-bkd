@@ -6,32 +6,29 @@ const cors = require("cors");
 
 const app = express();
 
-/* ---------------- ALLOWED ORIGINS ---------------- */
+
+app.use(cors());
+app.use(express.json());
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "https://www.recyclamine.com",
-  "https://recyclamine.vercel.app/"
-
+  'http://localhost:3000',      
+  'https://www.recyclamine.com/',
+  'https://recyclamine.vercel.app/'
 ];
 
-/* ---------------- MIDDLEWARE ---------------- */
-
-app.use(express.json());
 
 app.use(cors({
   origin: function (origin, callback) {
-
+   
     if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-
-    return callback(new Error("Not allowed by CORS"));
   }
 }));
-
 
 
 const PORT = process.env.PORT || 6000;
@@ -41,12 +38,16 @@ const PORT = process.env.PORT || 6000;
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
-  secure: true,
+  secure: true, // true for port 465
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
+
 
 
 app.post("/api/lead", async (req, res) => {
@@ -60,6 +61,7 @@ app.post("/api/lead", async (req, res) => {
     designation,
     phone
   } = req.body;
+
 
 
   if (!fname || !lname || !email || !orgName || !country) {
@@ -113,16 +115,3 @@ app.post("/api/lead", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-  
